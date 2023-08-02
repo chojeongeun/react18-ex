@@ -1,15 +1,14 @@
-import { getData } from './useGetData';
-import { useEffect } from 'react';
+import Post from './Post';
 
 function App() {
-	useEffect(() => {
-		getData();
-	}, []);
-	return <div className='App'></div>;
+	return (
+		<div className='App'>
+			<Post />
+		</div>
+	);
 }
 
 export default App;
-
 /*
   Automatic Batching
   : 핸들러 함수 안쪽에서 복수개의 state값이 변경될때 해당 변경사항을 묶어서 (batching)해서 한번만 리랜더링
