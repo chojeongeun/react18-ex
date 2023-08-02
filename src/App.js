@@ -1,24 +1,32 @@
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 
 function App() {
 	const [Count, SetCount] = useState(0);
 	const [Items, setItems] = useState([]);
+	const [isPending, startTransition] = useTransition();
+
+	console.log('isPending', isPending);
 
 	//아래 함수에서는 덜 중요하고 무거운 연산 때문에 급한 연산까지 덩달아 늦게 화면에 랜더링
 	const handleClick = () => {
 		//urgent op (급하게 처리되야될 중요한 연산)
 		SetCount(Count + 1);
 
-		//not urgent op (우선순위가 떨어지는 덜 중요한 연산)
-		const arr = Array(10000)
-			.fill(1)
-			.map((_, idx) => Count + idx);
-		setItems(arr);
+		startTransition(() => {
+			//not urgent op (우선순위가 떨어지는 덜 중요한 연산)
+			const arr = Array(10000)
+				.fill(1)
+				.map((_, idx) => Count + idx);
+			setItems(arr);
+		});
 	};
+
 	//아래 버튼 클릭할때마다 만개의 배열 리스트가 출력되기 전까지는 버튼의 숫자값이 늦게 카운트 되는 것을 확인
 	return (
 		<div className='App'>
-			<button onClick={handleClick}>{Count}</button>
+			<button onClick={handleClick} disabled={isPending}>
+				{Count}
+			</button>
 
 			<ul>
 				{Items.map((num) => {
