@@ -1,17 +1,20 @@
 import { useState } from 'react';
+import { flushSync } from 'react-dom';
 
 function App() {
 	console.log('rendered');
 	const [Count, setCount] = useState(0);
 	const [Count2, setCount2] = useState(0);
+	const [Count3, setCount3] = useState(0);
 
 	const returnPromise = () => {
 		return new Promise((res) => setTimeout(res, 500));
 	};
 	const handleClick = () => {
 		returnPromise().then(() => {
-			setCount(Count + 1);
+			flushSync(() => setCount(Count + 1));
 			setCount2(Count2 + 2);
+			setCount3(Count3 + 3);
 		});
 	};
 
@@ -19,7 +22,7 @@ function App() {
 		<div className='App'>
 			<button onClick={handleClick}>button</button>
 			<h1>
-				{Count}-{Count2}
+				{Count}-{Count2}-{Count3}
 			</h1>
 		</div>
 	);
